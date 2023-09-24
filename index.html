@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping List</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- CDN for font-awesome icons, cross-origin attribute allows the browser to access the resource on cross-origin server. -->
+    <!-- https://web.dev/referrer-best-practices/ -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="root">
+      <header class="header">
+        <img src="./images/note.png" />
+        <h1 class="app-title" id="app-title">Shopping List</h1>
+      </header>
+      <form class="form">
+        <input
+          type="text"
+          placeholder="Enter Item"
+          class="item-input"
+          id="item-input"
+          name="item"
+        />
+        <button type="submit" class="add-item-button">
+          <i class="fa fa-solid fa-plus"></i> Add Item
+        </button>
+      </form>
+      <div class="filter--container">
+        <input
+          type="text"
+          placeholder="Filter Items"
+          class="filter-items-input"
+          name="filters"
+        />
+      </div>
+      <div class="items--list--container"></div>
+      <button class="clear--btn">Clear All</button>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

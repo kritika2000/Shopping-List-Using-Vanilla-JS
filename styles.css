@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text&family=IBM+Plex+Serif&family=Poppins:wght@300;400;700&display=swap');
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --BG-COLOR: rgb(237, 235, 235);
+  --BUTTON-BG-COLOR: rgb(43, 43, 43);
+  --BUTTON-TEXT-COLOR: rgb(255, 255, 255);
+  --INPUT-BORDER_COLOR: rgb(202, 201, 201);
+}
+
+html {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--BG-COLOR);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.root {
+  display: grid;
+  gap: 1em;
+  margin: 1em;
+  width: 400px;
+}
+
+.header {
+  display: flex;
+}
+
+.header h1 {
+  font-weight: 350;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  font-family: inherit;
+  margin-top: 1em;
+  font-size: 1em;
+}
+
+:is(.form) .item-input {
+  height: 45px;
+  text-indent: 0.5em;
+  border: 1px solid var(--INPUT-BORDER_COLOR);
+  border-radius: 5px;
+  font-size: inherit;
+}
+
+.form .add-item-button {
+  align-self: flex-start;
+  padding: 0.7em 0.8em;
+  background-color: var(--BUTTON-BG-COLOR);
+  color: var(--BUTTON-TEXT-COLOR);
+  border: none;
+  border-radius: 5px;
+}
+
+.filter-items-input {
+  background-color: var(--BG-COLOR);
+  border: none;
+  width: 100%;
+  border-radius: 5px;
+  height: 30px;
+  font-size: inherit;
+}
+
+:is(.filter-items-input, .item-input):focus {
+  outline: none;
+}
+
+.filter--container {
+  display: none;
+}
+
+.filter--container::after {
+  content: '';
+  height: 1px;
+  width: 100%;
+  display: block;
+  background-color: var(--INPUT-BORDER_COLOR);
+}
+
+.items--list--container {
+  display: none;
+}
+
+.items--list--container ul {
+  list-style-type: none;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5em;
+}
+.items--list--container ul li {
+  flex-grow: 1;
+  flex-basis: 40%;
+  border: 1px solid var(--INPUT-BORDER_COLOR);
+  border-radius: 5px;
+  padding: 0.5em;
+}
+
+.items--list--container ul li button {
+  background-color: var(--BG-COLOR);
+  border-radius: 5px;
+  border: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: inherit;
+}
+
+.item i {
+  margin-left: auto;
+  color: red;
+}
+
+.clear--btn {
+  padding-block: 0.7em;
+  border: 1px solid var(--INPUT-BORDER_COLOR);
+  background-color: var(--BG-COLOR);
+  border-radius: 5px;
+  display: none;
+}
+
+.error {
+  align-self: flex-end;
+}
+
+.remove-item span {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+@media (max-width: 300px) {
+  .items--list--container ul li {
+    flex-basis: 100%;
+  }
+}

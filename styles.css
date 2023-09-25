@@ -11,8 +11,10 @@
 :root {
   --BG-COLOR: rgb(237, 235, 235);
   --BUTTON-BG-COLOR: rgb(43, 43, 43);
+  --BUTTON-HOVER-BG-COLOR: rgb(73, 73, 73);
   --BUTTON-TEXT-COLOR: rgb(255, 255, 255);
   --INPUT-BORDER_COLOR: rgb(202, 201, 201);
+  --DIALOG-BG-COLOR: #fff;
 }
 
 html {
@@ -59,13 +61,18 @@ body {
   font-size: inherit;
 }
 
-.form .add-item-button {
+.add-item-button {
   align-self: flex-start;
   padding: 0.7em 0.8em;
   background-color: var(--BUTTON-BG-COLOR);
   color: var(--BUTTON-TEXT-COLOR);
   border: none;
   border-radius: 5px;
+}
+
+.add-item-button:hover,
+.update--btn--container button:hover {
+  background-color: var(--BUTTON-HOVER-BG-COLOR);
 }
 
 .filter-items-input {
@@ -108,11 +115,19 @@ body {
   flex-basis: 40%;
   border: 1px solid var(--INPUT-BORDER_COLOR);
   border-radius: 5px;
-  padding: 0.5em;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  padding-inline: 0.5em;
+}
+
+.items--list--container ul li:hover {
+  text-decoration: underline;
+  transform: scale(1.02);
 }
 
 .items--list--container ul li button {
-  background-color: var(--BG-COLOR);
+  background-color: inherit;
   border-radius: 5px;
   border: none;
   display: flex;
@@ -121,9 +136,9 @@ body {
   color: inherit;
 }
 
-.item i {
+i:not(.fa-plus) {
   margin-left: auto;
-  color: red;
+  color: var(--BUTTON-BG-COLOR);
 }
 
 .clear--btn {
@@ -134,6 +149,11 @@ body {
   display: none;
 }
 
+.clear--btn:hover {
+  background-color: var(--BUTTON-BG-COLOR);
+  color: #fff;
+}
+
 .error {
   align-self: flex-end;
 }
@@ -141,6 +161,54 @@ body {
 .remove-item span {
   font-size: 1.1em;
   font-weight: bold;
+}
+
+.update--dialog--container {
+  height: 150px;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--DIALOG-BG-COLOR);
+  padding: 1em;
+  border-radius: 5px;
+  position: absolute;
+}
+
+.update--dialog--container.hidden {
+  display: none;
+}
+
+.update--dialog--container * {
+  flex-grow: 1;
+}
+
+.update--dialog--container :first-child {
+  flex-grow: 0;
+}
+
+.update--form {
+  display: grid;
+}
+
+.input--container .item-input {
+  width: 100%;
+  padding: 0.5em;
+  margin-top: 0.3em;
+  border: 1px solid gray;
+  border-radius: 3px;
+}
+
+.update--btn--container {
+  align-self: end;
+  justify-self: end;
+}
+
+.update--btn--container button {
+  border: none;
+  padding: 0.4em 0.6em;
+  background-color: var(--BUTTON-BG-COLOR);
+  color: #fff;
+  border-radius: 3px;
 }
 
 @media (max-width: 300px) {

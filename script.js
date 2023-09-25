@@ -6,6 +6,8 @@ const filters = document.querySelector('.filter--container');
 const listContainer = document.querySelector('.items--list--container');
 const clearBtn = document.querySelector('.clear--btn');
 const errorMsg = document.createElement('p');
+const dialog = document.querySelector('.update--dialog--container');
+const root = document.querySelector('.root');
 let itemList;
 
 /************************ Set Error Message Styles ************************/
@@ -23,7 +25,6 @@ function setErrorMessageStyles(text) {
 function capitalizeText(text) {
   let words = text.trim().split(' ');
   words = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
-  console.log(words);
   return words.join(' ');
 }
 
@@ -61,10 +62,26 @@ function getItemsFromStorage() {
   return JSON.parse(localStorage.getItem('items'));
 }
 
+// If Item Exists in local Storage already
+function ifAlreadyExistsInStorage(text) {
+  const itemsFromStorage = getItemsFromStorage() || [];
+  return itemsFromStorage.includes(text);
+}
+
 // Add an items to local storage
 function addItemsToStorage(text) {
   const itemsFromStorage = getItemsFromStorage() || [];
   itemsFromStorage.push(text);
+  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+}
+
+// Update an item in local storage
+function updateItemInStorage(text, newText) {
+  let itemsFromStorage = getItemsFromStorage() || [];
+  itemsFromStorage = itemsFromStorage.map((item) =>
+    item === text ? newText : item
+  );
+  localStorage.removeItem('items');
   localStorage.setItem('items', JSON.stringify(itemsFromStorage));
 }
 
@@ -114,6 +131,7 @@ function addItemsToDOMFromStorage() {
     itemList.appendChild(listItem);
   });
   itemList.addEventListener('click', removeItem);
+  itemList.addEventListener('click', updateItem);
 }
 
 // Adding List Items
@@ -137,11 +155,15 @@ function addListItemToDOM(e) {
   inputItem.value = '';
   checkUI(itemList.children);
   itemList.addEventListener('click', removeItem);
+  itemList.addEventListener('click', updateItem);
 }
 
 // Remove an Item
 function removeItem(e) {
-  if (e.target.parentElement.classList.contains('remove-item')) {
+  if (
+    e.target.parentElement.classList.contains('remove-item') &&
+    e.target === e.target.parentElement.children[1]
+  ) {
     const itemToRemove = e.target.parentElement.firstElementChild.textContent;
     e.target.parentElement.parentElement.remove();
     removeItemFromStorage(itemToRemove);
@@ -162,6 +184,9 @@ function clearAllItems() {
 
 // Show Error Message
 function onInputChange(e) {
+  if (inputItem.value === '') {
+    setErrorMessageStyles("Item can't be empty");
+  }
   e.target.style.outline =
     e.target.value !== ''
       ? (errorMsg.remove(), 'none')
@@ -185,6 +210,90 @@ function filterResults(e) {
         .toLowerCase()
         .includes(filter) && 'none';
   });
+}
+
+/************************************** Dialog Methods *************************************/
+
+// Close Dialog
+function closeDialog(e) {
+  console.log(e.target, e.currentTarget);
+  // e.stopPropagation();
+  dialog.classList.add('hidden');
+  root.style.opacity = '1';
+  // document.body.removeEventListener('click', closeDialog);
+}
+
+function onFormInputChange(e) {
+  if (inputItem.value === '') {
+    setErrorMessageStyles("Item can't be empty");
+  }
+  e.target.style.outline =
+    e.target.value !== ''
+      ? (errorMsg.remove(), 'none')
+      : (e.target.insertAdjacentElement('afterend', errorMsg), '1px solid red');
+}
+
+// Form submit handler
+function submitHandler(input, item) {
+  saveChanges(input, item);
+}
+
+// Open Dialog
+function openDialog(text, item) {
+  const form = document.querySelector('.update--form');
+  const input = document.querySelector('#updated-item');
+
+  function saveChanges(e) {
+    e.preventDefault();
+    console.log(item);
+    const inputValue = capitalizeText(input.value);
+    if (
+      inputValue === '' ||
+      (item.textContent !== input.value &&
+        ifAlreadyExistsInStorage(capitalizeText(inputValue)))
+    ) {
+      setErrorMessageStyles('Item already exists');
+      input.style.outline = '1px solid red';
+      input.insertAdjacentElement('afterend', errorMsg);
+      return;
+    }
+    updateItemInStorage(item.textContent, inputValue);
+    closeDialog(e);
+    item.innerText = inputValue;
+    form.removeEventListener('submit', saveChanges);
+  }
+
+  root.style.opacity = '0.4';
+  dialog.classList.remove('hidden');
+  const crossIcon = document.querySelector('.update--dialog--container i');
+  input.addEventListener('input', onFormInputChange);
+  form.addEventListener('submit', saveChanges);
+  crossIcon.addEventListener('click', closeDialog);
+  // document.body.addEventListener('click', closeDialog);
+  input.value = text;
+}
+
+function updateItem(e) {
+  if (e.target.nodeName === 'I' || e.target.nodeName === 'UL') return;
+  e.stopPropagation();
+  console.log(e.target, e.target.nodeName);
+  switch (e.target.nodeName) {
+    case 'LI':
+      openDialog(
+        e.target.firstElementChild.firstElementChild.textContent,
+        e.target.firstElementChild.firstElementChild
+      );
+      break;
+    case 'SPAN':
+      openDialog(e.target.textContent, e.target);
+      break;
+    case 'BUTTON':
+      openDialog(
+        e.target.firstElementChild.textContent,
+        e.target.firstElementChild
+      );
+      break;
+  }
 }
 
 /************************************** Event Listeners *************************************/

@@ -217,13 +217,14 @@ function filterResults(e) {
 // Close Dialog
 function closeDialog(e) {
   console.log(e.target, e.currentTarget);
-  // e.stopPropagation();
+  e.stopPropagation();
   dialog.classList.add('hidden');
   root.style.opacity = '1';
-  // document.body.removeEventListener('click', closeDialog);
+  document.body.removeEventListener('click', closeDialog);
 }
 
 function onFormInputChange(e) {
+  e.stopPropagation();
   if (inputItem.value === '') {
     setErrorMessageStyles("Item can't be empty");
   }
@@ -233,19 +234,19 @@ function onFormInputChange(e) {
       : (e.target.insertAdjacentElement('afterend', errorMsg), '1px solid red');
 }
 
-// Form submit handler
-function submitHandler(input, item) {
-  saveChanges(input, item);
+function onFormClickHandler(e) {
+  e.stopPropagation();
 }
 
 // Open Dialog
 function openDialog(text, item) {
   const form = document.querySelector('.update--form');
   const input = document.querySelector('#updated-item');
+  document.body.addEventListener('click', closeDialog);
 
   function saveChanges(e) {
+    console.log(e.target, e.currentTarget);
     e.preventDefault();
-    console.log(item);
     const inputValue = capitalizeText(input.value);
     if (
       inputValue === '' ||
@@ -261,6 +262,7 @@ function openDialog(text, item) {
     closeDialog(e);
     item.innerText = inputValue;
     form.removeEventListener('submit', saveChanges);
+    form.removeEventListener('click', onFormClickHandler);
   }
 
   root.style.opacity = '0.4';
@@ -268,15 +270,15 @@ function openDialog(text, item) {
   const crossIcon = document.querySelector('.update--dialog--container i');
   input.addEventListener('input', onFormInputChange);
   form.addEventListener('submit', saveChanges);
+  form.addEventListener('click', onFormClickHandler);
   crossIcon.addEventListener('click', closeDialog);
-  // document.body.addEventListener('click', closeDialog);
   input.value = text;
 }
 
 function updateItem(e) {
   if (e.target.nodeName === 'I' || e.target.nodeName === 'UL') return;
   e.stopPropagation();
-  console.log(e.target, e.target.nodeName);
+  console.log(e.target, e.currentTarget);
   switch (e.target.nodeName) {
     case 'LI':
       openDialog(

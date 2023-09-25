@@ -121,9 +121,9 @@ body {
   padding-inline: 0.5em;
 }
 
-.items--list--container ul li:hover {
-  text-decoration: underline;
+.items--list--container ul li button:hover {
   transform: scale(1.02);
+  text-decoration: underline;
 }
 
 .items--list--container ul li button {

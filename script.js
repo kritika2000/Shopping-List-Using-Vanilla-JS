@@ -220,6 +220,7 @@ function closeDialog(e) {
   e.stopPropagation();
   dialog.classList.add('hidden');
   root.style.opacity = '1';
+  root.style.zIndex = '1';
   document.body.removeEventListener('click', closeDialog);
 }
 
@@ -265,7 +266,8 @@ function openDialog(text, item) {
     form.removeEventListener('click', onFormClickHandler);
   }
 
-  root.style.opacity = '0.4';
+  root.style.opacity = '0.2';
+  root.style.zIndex = '-1';
   dialog.classList.remove('hidden');
   const crossIcon = document.querySelector('.update--dialog--container i');
   input.addEventListener('input', onFormInputChange);
